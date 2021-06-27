@@ -2,7 +2,7 @@
 #include "../include/ui_HomeWidget.h"
 
 HomeWidget::HomeWidget(QWidget *parent) :
-        QWidget(parent), ui(new Ui::HomeWidget)
+    QWidget(parent), ui(new Ui::HomeWidget)
 {
     ui->setupUi(this);
 }

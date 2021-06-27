@@ -1,9 +1,7 @@
 #ifndef QTODO_SIGNINWIDGET_HPP
 #define QTODO_SIGNINWIDGET_HPP
 
-#include <QWidget>
-#include <QMessageBox>
-#include <QRegularExpression>
+#include "abstractform.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -12,7 +10,7 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
-class SigninWidget : public QWidget
+class SigninWidget : public AbstractForm
 {
 Q_OBJECT
 
@@ -21,14 +19,11 @@ public:
     ~SigninWidget() override;
 
 private slots:
-    bool validateInputs();
-    void clearAll();
+    void validateInputs() override;
+    void clearAll() override;
 
 private:
     Ui::SigninWidget *ui;
-
-signals:
-    void dataValidated(QMap<QString, QString> map);
 };
 
 #endif //QTODO_SIGNINWIDGET_HPP

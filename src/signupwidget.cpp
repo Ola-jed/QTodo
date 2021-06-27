@@ -2,7 +2,7 @@
 #include "../include/ui_SignupWidget.h"
 
 SignupWidget::SignupWidget(QWidget *parent) :
-        QWidget(parent), ui(new Ui::SignupWidget)
+        AbstractForm(parent), ui(new Ui::SignupWidget)
 {
     ui->setupUi(this);
     connect(ui->cancel,&QPushButton::clicked,this,&SignupWidget::clearAll);
@@ -15,43 +15,41 @@ SignupWidget::~SignupWidget()
 }
 
 /// Function to validate the form
-/// \return bool
-bool SignupWidget::validateInputs()
+void SignupWidget::validateInputs()
 {
     if(ui->nameEdit->text().isEmpty())
     {
         QMessageBox::warning(this,"Name","The name field is required");
-        return false;
+        return;
     }
     if(ui->emailEdit->text().isEmpty())
     {
         QMessageBox::warning(this,"Email","The email field is required");
-        return false;
+        return;
     }
     if(!QRegularExpression{R"([^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+)"}
         .match(ui->emailEdit->text())
         .hasMatch())
     {
         QMessageBox::warning(this,"Email","Invalid email");
-        return false;
+        return;
     }
     if(ui->passwordEdit->text().isEmpty())
     {
         QMessageBox::warning(this,"Password","The password field is required");
-        return false;
+        return;
     }
     if(ui->passwordEdit->text() != ui->confirmPasswordEdit->text())
     {
         QMessageBox::warning(this,"Password","The password and confirm password fields should match");
-        return false;
+        return;
     }
-    emit dataValidated(QMap<QString, QString>{
+    emit dataValidated(QMap<QString, QVariant>{
         {"name",ui->nameEdit->text()},
         {"email",ui->emailEdit->text()},
         {"password1",ui->passwordEdit->text()},
         {"password2",ui->confirmPasswordEdit->text()},
     });
-    return true;
 }
 
 /// Clear all inputs to reset the form

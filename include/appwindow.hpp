@@ -24,13 +24,13 @@ private:
     void buildActions();
     void makeConnections();
 
-public:
-    explicit AppWindow(QWidget* parent = nullptr);
-
 private slots:
     void onQuit();
     void onSignup();
     void onSignin();
     void onLogout();
+
+public:
+    explicit AppWindow(QWidget* parent = nullptr);
 };
 #endif //QTODO_APPWINDOW_HPP

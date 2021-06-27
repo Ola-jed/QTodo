@@ -2,7 +2,7 @@
 #include "../include/ui_SigninWidget.h"
 
 SigninWidget::SigninWidget(QWidget *parent) :
-        QWidget(parent), ui(new Ui::SigninWidget)
+    AbstractForm(parent), ui(new Ui::SigninWidget)
 {
     ui->setupUi(this);
     connect(ui->cancel,&QPushButton::clicked,this,&SigninWidget::clearAll);
@@ -15,31 +15,29 @@ SigninWidget::~SigninWidget()
 }
 
 /// Validation of inputs
-/// \return bool
-bool SigninWidget::validateInputs()
+void SigninWidget::validateInputs()
 {
     if(ui->emailEdit->text().isEmpty())
     {
         QMessageBox::warning(this,"Email","The email field is required");
-        return false;
+        return;
     }
     if(!QRegularExpression{R"([^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+)"}
         .match(ui->emailEdit->text())
         .hasMatch())
     {
         QMessageBox::warning(this,"Email","Invalid email");
-        return false;
+        return;
     }
     if(ui->passwordEdit->text().isEmpty())
     {
         QMessageBox::warning(this,"Password","The password field is required");
-        return false;
+        return;
     }
-    emit dataValidated(QMap<QString, QString>{
+    emit dataValidated(QMap<QString,QVariant>{
         {"email",ui->emailEdit->text()},
         {"password",ui->passwordEdit->text()}
     });
-    return true;
 }
 
 /// Clear all inputs of the form

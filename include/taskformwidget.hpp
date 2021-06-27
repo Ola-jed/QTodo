@@ -1,8 +1,7 @@
 #ifndef QTODO_TASKFORMWIDGET_HPP
 #define QTODO_TASKFORMWIDGET_HPP
 
-#include <QWidget>
-#include <QMessageBox>
+#include "abstractform.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -11,7 +10,7 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
-class TaskFormWidget : public QWidget
+class TaskFormWidget : public AbstractForm
 {
 Q_OBJECT
 
@@ -19,15 +18,12 @@ public:
     explicit TaskFormWidget(QWidget *parent = nullptr);
     ~TaskFormWidget() override;
 
+private slots:
+    void clearAll() override;
+    void validateInputs() override;
+
 private:
     Ui::TaskFormWidget *ui;
-
-private slots:
-    void clearAll();
-    bool validateInputs();
-
-signals:
-    void dataValidated(QMap<QString,QVariant>);
 };
 
 #endif //QTODO_TASKFORMWIDGET_HPP
