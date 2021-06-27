@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/exit.png</file>
+        <file>assets/logout.png</file>
+        <file>assets/signin.png</file>
+        <file>assets/signup.png</file>
+        <file>assets/task.png</file>
+        <file>assets/icon.png</file>
+    </qresource>
+</RCC>
