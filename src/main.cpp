@@ -39,10 +39,10 @@ int main(int argc, char *argv[])
             qDebug() << rslt->readAll();
         }
     });*/
-    QFile f(":dark/style.qss");
+    QFile f{":dark/style.qss"};
     if (!f.exists())
     {
-        printf("Unable to set stylesheet, file not found\n");
+        qWarning() << "Unable to set stylesheet, file not found\n";
     }
     else
     {

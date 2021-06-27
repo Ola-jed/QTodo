@@ -2,6 +2,7 @@
 #define QTODO_TASKFORMWIDGET_HPP
 
 #include <QWidget>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui

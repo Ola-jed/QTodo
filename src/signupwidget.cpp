@@ -48,7 +48,8 @@ bool SignupWidget::validateInputs()
     emit dataValidated(QMap<QString, QString>{
         {"name",ui->nameEdit->text()},
         {"email",ui->emailEdit->text()},
-        {"password",ui->passwordEdit->text()}
+        {"password1",ui->passwordEdit->text()},
+        {"password2",ui->confirmPasswordEdit->text()},
     });
     return true;
 }
