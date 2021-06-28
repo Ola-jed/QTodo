@@ -6,5 +6,6 @@
         <file>assets/signup.png</file>
         <file>assets/task.png</file>
         <file>assets/icon.png</file>
+        <file>assets/edit.png</file>
     </qresource>
 </RCC>
