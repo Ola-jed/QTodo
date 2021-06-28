@@ -79,44 +79,60 @@ void AppWindow::onSignin()
 /// \param data
 void AppWindow::makeSignup(const QMap<QString,QVariant> &data)
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::signupSuceeded,[&](const QString &data){
-        auto const userData = QJsonDocument::fromJson(data.toUtf8());
-        auto const userJsonObject = userData.object();
-        appRequestsHandler.token = userJsonObject["token"].toString();
-        appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
-        QMessageBox::information(this,"Signup","Operation successful");
-    });
-    connect(&appRequestsHandler,&HttpRequestHandler::authFailed,[&](const QString &data){
-        QMessageBox::information(this,"Signup","Operation failed "+data);
-    });
+    connect(&appRequestsHandler,&HttpRequestHandler::signupSuceeded,this,&AppWindow::signupCompleted,Qt::UniqueConnection);
+    connect(&appRequestsHandler,&HttpRequestHandler::authFailed,this,&AppWindow::operationFailed,Qt::UniqueConnection);
     appRequestsHandler.trySignup(data);
 }
+
+/// Signup process completed successfully
+/// \param data
+void AppWindow::signupCompleted(const QString &data)
+{
+    auto const userData = QJsonDocument::fromJson(data.toUtf8());
+    auto const userJsonObject = userData.object();
+    appRequestsHandler.token = userJsonObject["token"].toString();
+    appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
+    QMessageBox::information(this,"Signup","Operation successful");
+}
+
 
 /// Signin the user with the data
 /// \param data
 void AppWindow::makeSignin(const QMap<QString,QVariant> &data)
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::signinSuceeded,[&](const QString &data){
-        auto const userData = QJsonDocument::fromJson(data.toUtf8());
-        auto const userJsonObject = userData.object();
-        appRequestsHandler.token = userJsonObject["token"].toString();
-        appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
-        QMessageBox::information(this,"Signin","Operation successful");
-    });
-    connect(&appRequestsHandler,&HttpRequestHandler::authFailed,[&](const QString &data){
-        QMessageBox::information(this,"Signin","Operation failed "+data);
-    });
+    connect(&appRequestsHandler,&HttpRequestHandler::signinSuceeded,this,&AppWindow::signinCompleted,Qt::UniqueConnection);
+    connect(&appRequestsHandler,&HttpRequestHandler::authFailed,this,&AppWindow::operationFailed,Qt::UniqueConnection);
     appRequestsHandler.trySignin(data);
+}
+
+/// Signin process completed successfully
+/// \param data
+void AppWindow::signinCompleted(const QString &data)
+{
+    auto const userData = QJsonDocument::fromJson(data.toUtf8());
+    auto const userJsonObject = userData.object();
+    appRequestsHandler.token = userJsonObject["token"].toString();
+    appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
+    QMessageBox::information(this,"Signin","Operation successful");
 }
 
 /// Try to logout the connected user
 void AppWindow::onLogout()
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::logoutSuceeded,[&]{
-        QMessageBox::information(this,"Logout","Operation successful");
-    });
-    connect(&appRequestsHandler,&HttpRequestHandler::authFailed,[&](const QString &data){
-        QMessageBox::information(this,"Logout","Operation failed "+data);
-    });
+    connect(&appRequestsHandler,&HttpRequestHandler::logoutSuceeded,this,&AppWindow::logoutCompleted,Qt::UniqueConnection);
+    connect(&appRequestsHandler,&HttpRequestHandler::authFailed, this,&AppWindow::operationFailed,Qt::UniqueConnection);
     appRequestsHandler.tryLogout();
+}
+
+/// Logout process completed successfully
+void AppWindow::logoutCompleted()
+{
+    QMessageBox::information(this,"Logout","Operation successful");
+}
+
+/// SHows a message box when something went wrong
+/// \param data
+void AppWindow::operationFailed(const QString &data)
+{
+    QMessageBox::warning(this,"Warning","Operation failed " + data);
 }

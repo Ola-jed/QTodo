@@ -31,9 +31,13 @@ private slots:
     void onQuit();
     void onSignup();
     void makeSignup(const QMap<QString,QVariant> &data);
+    void signupCompleted(const QString &data);
     void onSignin();
     void makeSignin(const QMap<QString,QVariant> &data);
+    void signinCompleted(const QString &data);
     void onLogout();
+    void logoutCompleted();
+    void operationFailed(const QString &data);
 
 public:
     explicit AppWindow(QWidget* parent = nullptr);
