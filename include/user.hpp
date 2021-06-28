@@ -8,6 +8,9 @@ struct User: Serializable
     QString name;
     QString email;
 
+    User() = default;
+    User(const User &) = default;
+
     /// Constructor
     /// \param name
     /// \param email

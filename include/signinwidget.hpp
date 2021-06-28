@@ -24,6 +24,9 @@ private slots:
 
 private:
     Ui::SigninWidget *ui;
+
+signals:
+    void dataValidated(QMap<QString, QVariant> map);
 };
 
 #endif //QTODO_SIGNINWIDGET_HPP

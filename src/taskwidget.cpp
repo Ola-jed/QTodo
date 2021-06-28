@@ -1,10 +1,17 @@
 #include "taskwidget.hpp"
 #include "../include/ui_TaskWidget.h"
 
-TaskWidget::TaskWidget(Task task,QWidget *parent) :
-    QWidget(parent), ui(new Ui::TaskWidget)
+TaskWidget::TaskWidget(const Task &task,QWidget *parent) :
+    QWidget(parent), ui(new Ui::TaskWidget),internalTask(task)
 {
     ui->setupUi(this);
+    ui->titleLabel->setText(task.title);
+    ui->priorityScreen->display(task.priority);
+    ui->descriptionLabel->setText(task.description);
+    ui->dateLabel->setText(task.date_limit);
+    connect(ui->edit,&QPushButton::clicked,[&]{
+        emit editRequested(internalTask);
+    });
 }
 
 TaskWidget::~TaskWidget()

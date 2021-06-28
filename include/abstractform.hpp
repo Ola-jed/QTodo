@@ -15,8 +15,6 @@ public:
 private slots:
     virtual void validateInputs() = 0;
     virtual void clearAll() = 0;
-signals:
-    void dataValidated(QMap<QString, QVariant> map);
 };
 
 

@@ -14,7 +14,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("QTodo");
     QCoreApplication::setOrganizationName("QTodo");
     QCoreApplication::setApplicationVersion("1.0");
-    /*QNetworkRequest rq{QUrl("http://localhost:8000/api/logout")};
+    /*
+    QNetworkRequest rq{QUrl("http://localhost:8000/api/logout")};
     rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     QJsonObject obj{};
     obj["name"] = "Ola";

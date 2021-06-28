@@ -24,6 +24,9 @@ private slots:
 
 private:
     Ui::SignupWidget *ui;
+
+signals:
+    void dataValidated(QMap<QString, QVariant> map);
 };
 
 #endif //QTODO_SIGNUPWIDGET_HPP

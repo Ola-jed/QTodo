@@ -16,11 +16,15 @@ class TaskWidget : public QWidget
 Q_OBJECT
 
 public:
-    explicit TaskWidget(Task task,QWidget *parent = nullptr);
+    explicit TaskWidget(const Task &task,QWidget *parent = nullptr);
     ~TaskWidget() override;
 
 private:
     Ui::TaskWidget *ui;
+    Task internalTask;
+
+signals:
+    void editRequested(const Task &taskToEdit);
 };
 
 #endif //QTODO_TASKWIDGET_HPP

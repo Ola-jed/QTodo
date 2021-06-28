@@ -24,6 +24,9 @@ private slots:
 
 private:
     Ui::StepFormWidget *ui;
+
+signals:
+    void dataValidated(QMap<QString, QVariant> map);
 };
 
 #endif //QTODO_STEPFORMWIDGET_HPP

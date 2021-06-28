@@ -46,6 +46,7 @@ void AppWindow::makeConnections()
     connect(exit,&QAction::triggered,this,&AppWindow::onQuit);
     connect(signUp,&QAction::triggered,this,&AppWindow::onSignup);
     connect(signIn,&QAction::triggered,this,&AppWindow::onSignin);
+    connect(logout,&QAction::triggered,this,&AppWindow::onLogout);
 }
 
 /// Prompt to ask the user a confirmation to quit
@@ -58,22 +59,64 @@ void AppWindow::onQuit()
     }
 }
 
-/// Show the signup form and handle data
+/// Show the signup form and handle the signup process
 void AppWindow::onSignup()
 {
     auto signupWidget = new SignupWidget;
     setCentralWidget(signupWidget);
+    connect(signupWidget,&SignupWidget::dataValidated,this,&AppWindow::makeSignup);
 }
 
-/// Show the signin form for the user
+/// Show the signin form for the user and handle the signin process
 void AppWindow::onSignin()
 {
     auto signinWidget = new SigninWidget;
     setCentralWidget(signinWidget);
+    connect(signinWidget,&SigninWidget::dataValidated,this,&AppWindow::makeSignin);
+}
+
+/// Signup a new user with the data
+/// \param data
+void AppWindow::makeSignup(const QMap<QString,QVariant> &data)
+{
+    connect(&appRequestsHandler,&HttpRequestHandler::signupSuceeded,[&](const QString &data){
+        auto const userData = QJsonDocument::fromJson(data.toUtf8());
+        auto const userJsonObject = userData.object();
+        appRequestsHandler.token = userJsonObject["token"].toString();
+        appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
+        QMessageBox::information(this,"Signup","Operation successful");
+    });
+    connect(&appRequestsHandler,&HttpRequestHandler::authFailed,[&](const QString &data){
+        QMessageBox::information(this,"Signup","Operation failed "+data);
+    });
+    appRequestsHandler.trySignup(data);
+}
+
+/// Signin the user with the data
+/// \param data
+void AppWindow::makeSignin(const QMap<QString,QVariant> &data)
+{
+    connect(&appRequestsHandler,&HttpRequestHandler::signinSuceeded,[&](const QString &data){
+        auto const userData = QJsonDocument::fromJson(data.toUtf8());
+        auto const userJsonObject = userData.object();
+        appRequestsHandler.token = userJsonObject["token"].toString();
+        appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
+        QMessageBox::information(this,"Signin","Operation successful");
+    });
+    connect(&appRequestsHandler,&HttpRequestHandler::authFailed,[&](const QString &data){
+        QMessageBox::information(this,"Signin","Operation failed "+data);
+    });
+    appRequestsHandler.trySignin(data);
 }
 
 /// Try to logout the connected user
 void AppWindow::onLogout()
 {
-
+    connect(&appRequestsHandler,&HttpRequestHandler::logoutSuceeded,[&]{
+        QMessageBox::information(this,"Logout","Operation successful");
+    });
+    connect(&appRequestsHandler,&HttpRequestHandler::authFailed,[&](const QString &data){
+        QMessageBox::information(this,"Logout","Operation failed "+data);
+    });
+    appRequestsHandler.tryLogout();
 }

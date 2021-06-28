@@ -24,6 +24,9 @@ private slots:
 
 private:
     Ui::TaskFormWidget *ui;
+
+signals:
+    void dataValidated(QMap<QString, QVariant> map);
 };
 
 #endif //QTODO_TASKFORMWIDGET_HPP
