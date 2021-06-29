@@ -7,5 +7,6 @@
         <file>assets/task.png</file>
         <file>assets/icon.png</file>
         <file>assets/edit.png</file>
+        <file>assets/github.png</file>
     </qresource>
 </RCC>

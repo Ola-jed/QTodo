@@ -6,7 +6,7 @@ TaskWidget::TaskWidget(const Task &task,QWidget *parent) :
 {
     ui->setupUi(this);
     ui->titleLabel->setText(task.title);
-    ui->priorityScreen->display(task.priority);
+    ui->prioritySlider->setValue(task.priority);
     ui->descriptionLabel->setText(task.description);
     ui->dateLabel->setText(task.date_limit);
     connect(ui->edit,&QPushButton::clicked,[&]{

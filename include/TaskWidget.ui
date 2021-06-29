@@ -59,15 +59,27 @@
        </widget>
       </item>
       <item>
-       <widget class="QLCDNumber" name="priorityScreen">
-        <property name="smallDecimalPoint">
+       <widget class="QSlider" name="prioritySlider">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="digitCount">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>10</number>
+        </property>
+        <property name="pageStep">
          <number>2</number>
         </property>
-        <property name="segmentStyle">
-         <enum>QLCDNumber::Outline</enum>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBothSides</enum>
+        </property>
+        <property name="tickInterval">
+         <number>1</number>
         </property>
        </widget>
       </item>

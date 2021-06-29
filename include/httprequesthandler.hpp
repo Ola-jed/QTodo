@@ -25,9 +25,9 @@ public slots:
     void tryLogout();
 
 signals:
-    void signupSuceeded(const QString &result);
-    void signinSuceeded(const QString &result);
-    void logoutSuceeded();
+    void signupSucceeded(const QString &result);
+    void signinSucceeded(const QString &result);
+    void logoutSucceeded();
     void authFailed(const QString &result);
 };
 

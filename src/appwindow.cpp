@@ -52,8 +52,7 @@ void AppWindow::makeConnections()
 /// Prompt to ask the user a confirmation to quit
 void AppWindow::onQuit()
 {
-    const auto ans = QMessageBox::question(this,"Exit","Do you want to exit ?");
-    if(ans == QMessageBox::Yes)
+    if(QMessageBox::question(this,"Exit","Do you want to exit ?") == QMessageBox::Yes)
     {
         qApp->quit();
     }
@@ -79,7 +78,7 @@ void AppWindow::onSignin()
 /// \param data
 void AppWindow::makeSignup(const QMap<QString,QVariant> &data)
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::signupSuceeded,this,&AppWindow::signupCompleted,Qt::UniqueConnection);
+    connect(&appRequestsHandler, &HttpRequestHandler::signupSucceeded, this, &AppWindow::signupCompleted, Qt::UniqueConnection);
     connect(&appRequestsHandler,&HttpRequestHandler::authFailed,this,&AppWindow::operationFailed,Qt::UniqueConnection);
     appRequestsHandler.trySignup(data);
 }
@@ -100,7 +99,7 @@ void AppWindow::signupCompleted(const QString &data)
 /// \param data
 void AppWindow::makeSignin(const QMap<QString,QVariant> &data)
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::signinSuceeded,this,&AppWindow::signinCompleted,Qt::UniqueConnection);
+    connect(&appRequestsHandler,&HttpRequestHandler::signinSucceeded,this,&AppWindow::signinCompleted,Qt::UniqueConnection);
     connect(&appRequestsHandler,&HttpRequestHandler::authFailed,this,&AppWindow::operationFailed,Qt::UniqueConnection);
     appRequestsHandler.trySignin(data);
 }
@@ -119,7 +118,7 @@ void AppWindow::signinCompleted(const QString &data)
 /// Try to logout the connected user
 void AppWindow::onLogout()
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::logoutSuceeded,this,&AppWindow::logoutCompleted,Qt::UniqueConnection);
+    connect(&appRequestsHandler,&HttpRequestHandler::logoutSucceeded,this,&AppWindow::logoutCompleted, Qt::UniqueConnection);
     connect(&appRequestsHandler,&HttpRequestHandler::authFailed, this,&AppWindow::operationFailed,Qt::UniqueConnection);
     appRequestsHandler.tryLogout();
 }
@@ -134,5 +133,5 @@ void AppWindow::logoutCompleted()
 /// \param data
 void AppWindow::operationFailed(const QString &data)
 {
-    QMessageBox::warning(this,"Warning","Operation failed " + data);
+    QMessageBox::warning(this,"Warning","Operation failed : " + data);
 }

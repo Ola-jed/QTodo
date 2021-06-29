@@ -15,12 +15,12 @@ void HttpRequestHandler::trySignin(const QMap<QString, QVariant> &data)
         obj[aKey] = data[aKey].toString();
     }
     obj["device_name"] = QSysInfo::machineHostName();
-    QJsonDocument doc{obj};
+    const QJsonDocument doc{obj};
     auto const qNetworkReply = manager.post(rq,doc.toJson());
     connect(qNetworkReply,&QNetworkReply::finished,this,[=]{
         if (qNetworkReply->error() == QNetworkReply::NoError)
         {
-            emit signinSuceeded(qNetworkReply->readAll());
+            emit signinSucceeded(qNetworkReply->readAll());
         }
         else
         {
@@ -43,12 +43,12 @@ void HttpRequestHandler::trySignup(const QMap<QString, QVariant> &data)
         obj[aKey] = data[aKey].toString();
     }
     obj["device_name"] = QSysInfo::machineHostName();
-    QJsonDocument doc{obj};
+    const QJsonDocument doc{obj};
     auto const qNetworkReply = manager.post(rq,doc.toJson());
     connect(qNetworkReply,&QNetworkReply::finished,this,[=,this]{
         if (qNetworkReply->error() == QNetworkReply::NoError)
         {
-            emit signupSuceeded(qNetworkReply->readAll());
+            emit signupSucceeded(qNetworkReply->readAll());
         }
         else
         {
@@ -64,14 +64,14 @@ void HttpRequestHandler::tryLogout()
 {
     QNetworkRequest rq{QUrl(API_URL + "logout")};
     rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
-    auto header = QString("Bearer %1").arg(token);
+    auto const header = QString("Bearer %1").arg(token);
     rq.setRawHeader(QByteArray("Authorization"), header.toUtf8());
     auto const qNetworkReply = manager.post(rq,"");
     connect(qNetworkReply,&QNetworkReply::finished,this,[=,this]{
         if (qNetworkReply->error() == QNetworkReply::NoError)
         {
             token.clear();
-            emit logoutSuceeded();
+            emit logoutSucceeded();
         }
         else
         {
