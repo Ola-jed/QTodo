@@ -36,6 +36,7 @@ private slots:
     void makeSignin(const QMap<QString,QVariant> &data);
     void signinCompleted(const QString &data);
     void onLogout();
+    void onTaskLoading();
     void logoutCompleted();
     void operationFailed(const QString &data);
 

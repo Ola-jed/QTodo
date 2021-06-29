@@ -8,5 +8,6 @@
         <file>assets/icon.png</file>
         <file>assets/edit.png</file>
         <file>assets/github.png</file>
+        <file>assets/delete.png</file>
     </qresource>
 </RCC>

@@ -46,6 +46,7 @@ void AppWindow::makeConnections()
     connect(exit,&QAction::triggered,this,&AppWindow::onQuit);
     connect(signUp,&QAction::triggered,this,&AppWindow::onSignup);
     connect(signIn,&QAction::triggered,this,&AppWindow::onSignin);
+    connect(tasks,&QAction::triggered,this,&AppWindow::onTaskLoading);
     connect(logout,&QAction::triggered,this,&AppWindow::onLogout);
 }
 
@@ -134,4 +135,16 @@ void AppWindow::logoutCompleted()
 void AppWindow::operationFailed(const QString &data)
 {
     QMessageBox::warning(this,"Warning","Operation failed : " + data);
+}
+
+/// Load all the tasks
+void AppWindow::onTaskLoading()
+{
+    connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[&](const QList<Task> &data){
+       qDebug() << data.first().serialize();
+    });
+    connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&](){
+        qDebug() << "Error retrieving data";
+    });
+    appRequestsHandler.tryTasksRetrieving();
 }

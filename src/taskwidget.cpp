@@ -12,6 +12,9 @@ TaskWidget::TaskWidget(const Task &task,QWidget *parent) :
     connect(ui->edit,&QPushButton::clicked,[&]{
         emit editRequested(internalTask);
     });
+    connect(ui->deleteBtn,&QPushButton::clicked,[&]{
+       emit deleteRequested(internalTask);
+    });
 }
 
 TaskWidget::~TaskWidget()
