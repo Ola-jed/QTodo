@@ -90,7 +90,29 @@ void HttpRequestHandler::tryLogout()
 /// \param taskToCreate
 void HttpRequestHandler::tryTaskCreation(const Task &taskToCreate)
 {
-
+    QNetworkRequest rq{QUrl(API_URL + "tasks")};
+    rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    QJsonObject obj{};
+    obj["title"] = taskToCreate.title;
+    obj["description"] = taskToCreate.description;
+    obj["date_limit"] = taskToCreate.date_limit;
+    obj["has_steps"] = taskToCreate.has_steps;
+    obj["priority"] = taskToCreate.priority;
+    const QJsonDocument doc{obj};
+    auto const header = QString("Bearer %1").arg(token);
+    rq.setRawHeader(QByteArray("Authorization"), header.toUtf8());
+    auto const qNetworkReply = manager.post(rq,doc.toJson());
+    connect(qNetworkReply,&QNetworkReply::finished,this,[=,this]{
+        if (qNetworkReply->error() == QNetworkReply::NoError)
+        {
+            emit taskCreationSucceeded();
+        }
+        else
+        {
+            emit dataCreationFailed();
+        }
+        manager.clearConnectionCache();
+    });
 }
 
 /// Get all tasks created by the current user
@@ -107,6 +129,65 @@ void HttpRequestHandler::tryTasksRetrieving()
     auto const header = QString("Bearer %1").arg(token);
     rq.setRawHeader(QByteArray("Authorization"), header.toUtf8());
     auto const qNetworkReply = manager.get(rq);
+    connect(qNetworkReply,&QNetworkReply::finished,this,[=,this]{
+        if (qNetworkReply->error() == QNetworkReply::NoError)
+        {
+            auto const jsonResponse = QJsonDocument::fromJson(qNetworkReply->readAll());
+            auto const tasksList = jsonResponse.object()["data"].toArray().toVariantList();
+            QList<Task> tasks{};
+            for (const auto &tempTaskSerialized : tasksList)
+            {
+                tasks.push_back(Task::deserialize(QJsonDocument{tempTaskSerialized.toJsonObject()}.toJson()));
+            }
+            emit tasksRetrievingSucceeded(tasks);
+        }
+        else
+        {
+            emit dataRetrievingFailed();
+        }
+        manager.clearConnectionCache();
+    });
+}
+
+/// Delete a task
+/// \param taskToDelete
+void HttpRequestHandler::tryTaskDeletion(const Task &taskToDelete)
+{
+    QNetworkRequest rq{QUrl(API_URL + "tasks/" + taskToDelete.slug)};
+    rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    auto const header = QString("Bearer %1").arg(token);
+    rq.setRawHeader(QByteArray("Authorization"), header.toUtf8());
+    auto const qNetworkReply = manager.deleteResource(rq);
+    connect(qNetworkReply,&QNetworkReply::finished,this,[=,this]{
+        if (qNetworkReply->error() == QNetworkReply::NoError)
+        {
+            emit taskDeletionSucceeded();
+        }
+        else
+        {
+            emit dataDeletionFailed();
+        }
+        manager.clearConnectionCache();
+    });
+}
+
+/// Update the task that corresponds to the given slug
+/// \param slug
+/// \param newValue
+void HttpRequestHandler::tryTaskUpdate(const QString &slug, const Task &newValue)
+{
+    QNetworkRequest rq{QUrl(API_URL + "tasks/" + slug)};
+    rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    auto const header = QString("Bearer %1").arg(token);
+    rq.setRawHeader(QByteArray("Authorization"), header.toUtf8());
+    QJsonObject obj{};
+    obj["title"] = newValue.title;
+    obj["description"] = newValue.description;
+    obj["date_limit"] = newValue.date_limit;
+    obj["has_steps"] = newValue.has_steps;
+    obj["priority"] = newValue.priority;
+    const QJsonDocument doc{obj};
+    auto const qNetworkReply = manager.put(rq,doc.toJson());
     connect(qNetworkReply,&QNetworkReply::finished,this,[=,this]{
         if (qNetworkReply->error() == QNetworkReply::NoError)
         {

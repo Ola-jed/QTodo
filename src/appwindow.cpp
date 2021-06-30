@@ -1,6 +1,6 @@
 #include "appwindow.hpp"
 
-AppWindow::AppWindow(QWidget *parent): QMainWindow(parent)
+AppWindow::AppWindow(QWidget *parent): QMainWindow(parent),taskList(new TaskList())
 {
     buildActions();
     buildToolbar();
@@ -140,6 +140,7 @@ void AppWindow::operationFailed(const QString &data)
 /// Load all the tasks
 void AppWindow::onTaskLoading()
 {
+    setCentralWidget(taskList);
     connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[&](const QList<Task> &data){
        qDebug() << data.first().serialize();
     });

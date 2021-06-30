@@ -5,6 +5,7 @@
 #include "homewidget.hpp"
 #include "signupwidget.hpp"
 #include "signinwidget.hpp"
+#include "tasklist.hpp"
 #include <QGuiApplication>
 #include <QMainWindow>
 #include <QToolBar>
@@ -21,6 +22,7 @@ private:
     QAction *tasks;
     QAction *logout;
     QAction *exit;
+    TaskList *taskList;
     void buildLayout();
     void buildToolbar();
     void buildActions();

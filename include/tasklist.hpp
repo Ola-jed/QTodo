@@ -2,6 +2,8 @@
 #define QTODO_TASKLIST_HPP
 
 #include <QWidget>
+#include "taskformwidget.hpp"
+#include "taskwidget.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -18,6 +20,9 @@ public:
     explicit TaskList(QWidget *parent = nullptr);
     ~TaskList() override;
 
+public slots:
+    void insertTask(const Task &taskToInsert);
+    void insertTaskList(const QList<Task> &tasksToInsert);
 private:
     Ui::TaskList *ui;
 };

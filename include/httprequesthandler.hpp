@@ -27,6 +27,9 @@ public slots:
     void trySignin(const QMap<QString,QVariant> &data);
     void tryLogout();
     void tryTaskCreation(const Task &taskToCreate);
+    void tryTaskUpdate(const QString &slug,const Task &newValue);
+    void tryTaskDeletion(const Task &taskToDelete);
+    void tryTaskSearching(const QString &title);
     void tryTasksRetrieving();
 
 signals:
@@ -35,9 +38,11 @@ signals:
     void logoutSucceeded();
     void authFailed(const QString &result);
     void taskCreationSucceeded();
+    void taskDeletionSucceeded();
     void tasksRetrievingSucceeded(const QList<Task> &tasks);
     void dataCreationFailed();
     void dataRetrievingFailed();
+    void dataDeletionFailed();
 };
 
 #endif //QTODO_HTTPREQUESTHANDLER_HPP
