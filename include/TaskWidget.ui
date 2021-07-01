@@ -106,6 +106,12 @@
      <property name="wordWrap">
       <bool>true</bool>
      </property>
+     <property name="margin">
+      <number>5</number>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>
@@ -134,7 +140,7 @@
       <item>
        <widget class="QPushButton" name="edit">
         <property name="text">
-         <string>Edit</string>
+         <string/>
         </property>
         <property name="icon">
          <iconset>
@@ -144,8 +150,14 @@
       </item>
       <item>
        <widget class="QPushButton" name="deleteBtn">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
-         <string>Delete</string>
+         <string/>
         </property>
         <property name="icon">
          <iconset resource="../resources.qrc">

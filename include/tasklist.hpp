@@ -32,6 +32,7 @@ private:
 signals:
     void taskCreationRequested();
     void taskSearchRequested(const QString &search);
+    void taskEditRequested(const Task &taskToDelete);
     void taskDeleteRequested(const Task &taskToDelete);
 };
 

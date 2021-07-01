@@ -13,7 +13,7 @@ AppWindow::AppWindow(QWidget *parent): QMainWindow(parent),taskList(new TaskList
 void AppWindow::buildLayout()
 {
     setWindowIcon(QIcon(":assets/icon.png"));
-    resize(600,450);
+    resize(900,550);
     setGeometry(QStyle::alignedRect(Qt::LeftToRight,Qt::AlignCenter,size(),QGuiApplication::primaryScreen()->availableGeometry()));
     setCentralWidget(new HomeWidget);
     initStatusBar();
@@ -53,7 +53,7 @@ void AppWindow::buildActions()
     exit = new QAction(QIcon(":assets/exit.png"),"Exit",this);
 }
 
-// Make all the connections for the toolbar actions
+/// Make all the connections for the toolbar actions
 void AppWindow::makeConnections()
 {
     connect(exit,&QAction::triggered,this,&AppWindow::onQuit);
@@ -63,6 +63,7 @@ void AppWindow::makeConnections()
     connect(logout,&QAction::triggered,this,&AppWindow::onLogout);
     connect(taskList,&TaskList::taskSearchRequested,this,&AppWindow::onTaskSearch);
     connect(taskList,&TaskList::taskCreationRequested,this,&AppWindow::onTaskCreation);
+    connect(taskList,&TaskList::taskEditRequested,this,&AppWindow::onTaskCreation);
     connect(taskList,&TaskList::taskDeleteRequested,this,&AppWindow::onTaskDelete);
 }
 
@@ -163,6 +164,7 @@ void AppWindow::operationFailed(const QString &data)
 void AppWindow::onTaskLoading()
 {
     setCentralWidget(taskList);
+    taskList->clear();
     connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[&](const QList<Task> &data){
        taskList->insertTaskList(data);
     });
@@ -219,4 +221,11 @@ void AppWindow::makeTaskCreation(const QMap<QString, QVariant> &data)
         qDebug() << "Task creation failed";
     });
     appRequestsHandler.tryTaskCreation(data);
+}
+
+/// Show the form to edit a task
+/// \param taskToEdit
+void AppWindow::onTaskEdit(const Task &taskToEdit)
+{
+
 }

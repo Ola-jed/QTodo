@@ -32,7 +32,7 @@ void TaskFormWidget::validateInputs()
         {"description",ui->descriptionEdit->toPlainText()},
         {"has_steps",ui->hasStepsCheckBox->isChecked()},
         {"priority",ui->prioritySpinBox->value()},
-        {"date_limit",ui->dateEdit->date().toString("dd/mm/yyyy")}
+        {"date_limit",ui->dateEdit->date().toString("dd/MM/yyyy")}
     });
 }
 

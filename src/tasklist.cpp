@@ -17,8 +17,8 @@ TaskList::TaskList(QWidget *parent) :
         }
     });
     connect(ui->addBtn,&QPushButton::clicked,[this]{
-            qDebug() << "Add";
-            emit taskCreationRequested();
+        qDebug() << "Add";
+        emit taskCreationRequested();
     });
 }
 
@@ -46,7 +46,10 @@ void TaskList::insertTask(const Task &taskToInsert)
     auto taskWid = new TaskWidget(taskToInsert, this);
     connect(taskWid,&TaskWidget::deleteRequested,[=,this]{
         emit taskDeleteRequested(taskToInsert);
-        qDebug() << "Delete a task";
+    });
+    connect(taskWid,&TaskWidget::editRequested,[=,this]{
+        emit taskEditRequested(taskToInsert);
+        qDebug() << "Edit a task";
     });
     ui->scrollArea->widget()->layout()->addWidget(taskWid);
     auto lineB = new QWidget;

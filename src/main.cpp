@@ -1,11 +1,7 @@
 #include "appwindow.hpp"
-#include "homewidget.hpp"
 #include "step.hpp"
 #include <QFile>
 #include <QApplication>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
 
 int main(int argc, char *argv[])
 {
@@ -25,8 +21,6 @@ int main(int argc, char *argv[])
         QTextStream ts(&f);
         qApp->setStyleSheet(ts.readAll());
     }
-    QVariant v{true};
-    qDebug() << v.toInt();
     AppWindow e{};
     e.show();
     return QApplication::exec();

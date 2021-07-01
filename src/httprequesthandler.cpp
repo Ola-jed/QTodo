@@ -101,7 +101,7 @@ void HttpRequestHandler::tryTaskCreation(const QMap<QString,QVariant> &taskToCre
     obj["title"] = taskToCreateAsMap["title"].toString();
     obj["description"] = taskToCreateAsMap["description"].toString();
     obj["date_limit"] = taskToCreateAsMap["date_limit"].toString();
-    obj["has_steps"] = taskToCreateAsMap["has_steps"].toBool();
+    obj["has_steps"] = taskToCreateAsMap["has_steps"].toInt();
     obj["priority"] = taskToCreateAsMap["priority"].toInt();
     const QJsonDocument doc{obj};
     auto const header = QString("Bearer %1").arg(token);
@@ -114,6 +114,7 @@ void HttpRequestHandler::tryTaskCreation(const QMap<QString,QVariant> &taskToCre
         }
         else
         {
+            qDebug() << "Error : " << qNetworkReply->errorString();
             emit dataCreationFailed();
         }
         manager.clearConnectionCache();
