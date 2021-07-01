@@ -17,9 +17,9 @@ Just import the project if you use an ide.
 
 ## TODO
 
--[ ] Edit a task
-  -[ ] Show the form with previous data
-  -[ ] Handle update
--[ ] Mark a task as finished or unfinished
--[ ] Export a(ll) task(s) to csv
--[ ] Reset password
+- [ ] Edit a task
+  - [ ] Show the form with previous data
+  - [ ] Handle update
+- [ ] Mark a task as finished or unfinished
+- [ ] Export a(ll) task(s) to csv
+- [ ] Reset password
