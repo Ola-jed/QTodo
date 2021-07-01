@@ -2,6 +2,7 @@
 #define QTODO_TASKLIST_HPP
 
 #include <QWidget>
+#include <QLayoutItem>
 #include "taskformwidget.hpp"
 #include "taskwidget.hpp"
 
@@ -21,10 +22,17 @@ public:
     ~TaskList() override;
 
 public slots:
+    void clear();
     void insertTask(const Task &taskToInsert);
     void insertTaskList(const QList<Task> &tasksToInsert);
+
 private:
     Ui::TaskList *ui;
+
+signals:
+    void taskCreationRequested();
+    void taskSearchRequested(const QString &search);
+    void taskDeleteRequested(const Task &taskToDelete);
 };
 
 #endif //QTODO_TASKLIST_HPP

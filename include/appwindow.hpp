@@ -1,11 +1,12 @@
 #ifndef QTODO_APPWINDOW_HPP
 #define QTODO_APPWINDOW_HPP
 
-#include "httprequesthandler.hpp"
-#include "homewidget.hpp"
-#include "signupwidget.hpp"
-#include "signinwidget.hpp"
 #include "tasklist.hpp"
+#include "homewidget.hpp"
+#include "signinwidget.hpp"
+#include "signupwidget.hpp"
+#include "taskformwidget.hpp"
+#include "httprequesthandler.hpp"
 #include <QGuiApplication>
 #include <QMainWindow>
 #include <QToolBar>
@@ -41,6 +42,9 @@ private slots:
     void onTaskLoading();
     void logoutCompleted();
     void operationFailed(const QString &data);
+    void onTaskSearch(const QString &search);
+    void onTaskCreation();
+    void onTaskDelete(const Task &taskToDelete);
 
 public:
     explicit AppWindow(QWidget* parent = nullptr);

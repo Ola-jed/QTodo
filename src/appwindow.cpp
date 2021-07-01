@@ -48,6 +48,9 @@ void AppWindow::makeConnections()
     connect(signIn,&QAction::triggered,this,&AppWindow::onSignin);
     connect(tasks,&QAction::triggered,this,&AppWindow::onTaskLoading);
     connect(logout,&QAction::triggered,this,&AppWindow::onLogout);
+    connect(taskList,&TaskList::taskSearchRequested,this,&AppWindow::onTaskSearch);
+    connect(taskList,&TaskList::taskCreationRequested,this,&AppWindow::onTaskCreation);
+    connect(taskList,&TaskList::taskDeleteRequested,this,&AppWindow::onTaskDelete);
 }
 
 /// Prompt to ask the user a confirmation to quit
@@ -142,10 +145,43 @@ void AppWindow::onTaskLoading()
 {
     setCentralWidget(taskList);
     connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[&](const QList<Task> &data){
-       qDebug() << data.first().serialize();
+       taskList->insertTaskList(data);
     });
     connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&](){
         qDebug() << "Error retrieving data";
     });
     appRequestsHandler.tryTasksRetrieving();
+}
+
+/// Search for tasks
+/// \param search
+void AppWindow::onTaskSearch(const QString &search)
+{
+    connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[&](const QList<Task> &data){
+        taskList->clear();
+        taskList->insertTaskList(data);
+    });
+    connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&](){
+        qDebug() << "Error retrieving data";
+    });
+    appRequestsHandler.tryTaskSearching(search);
+}
+
+/// Delete a task
+/// \param taskToDelete
+void AppWindow::onTaskDelete(const Task &taskToDelete)
+{
+    appRequestsHandler.tryTaskDeletion(taskToDelete);
+    connect(&appRequestsHandler,&HttpRequestHandler::taskDeletionSucceeded,[&]{
+       onTaskLoading();
+    });
+    connect(&appRequestsHandler,&HttpRequestHandler::dataDeletionFailed,[&]{
+        qDebug() << "Could not delete task";
+    });
+}
+
+/// Show the popup to create a new task
+void AppWindow::onTaskCreation()
+{
+    qDebug() << "Creates a task";
 }

@@ -90,6 +90,11 @@ void HttpRequestHandler::tryLogout()
 /// \param taskToCreate
 void HttpRequestHandler::tryTaskCreation(const Task &taskToCreate)
 {
+    if(token.isEmpty())
+    {
+        emit dataCreationFailed();
+        return;
+    }
     QNetworkRequest rq{QUrl(API_URL + "tasks")};
     rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     QJsonObject obj{};
@@ -153,6 +158,11 @@ void HttpRequestHandler::tryTasksRetrieving()
 /// \param taskToDelete
 void HttpRequestHandler::tryTaskDeletion(const Task &taskToDelete)
 {
+    if(token.isEmpty())
+    {
+        emit dataDeletionFailed();
+        return;
+    }
     QNetworkRequest rq{QUrl(API_URL + "tasks/" + taskToDelete.slug)};
     rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     auto const header = QString("Bearer %1").arg(token);
@@ -176,6 +186,11 @@ void HttpRequestHandler::tryTaskDeletion(const Task &taskToDelete)
 /// \param newValue
 void HttpRequestHandler::tryTaskUpdate(const QString &slug, const Task &newValue)
 {
+    if(token.isEmpty())
+    {
+        emit dataUpdateFailed();
+        return;
+    }
     QNetworkRequest rq{QUrl(API_URL + "tasks/" + slug)};
     rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     auto const header = QString("Bearer %1").arg(token);
@@ -192,6 +207,35 @@ void HttpRequestHandler::tryTaskUpdate(const QString &slug, const Task &newValue
         if (qNetworkReply->error() == QNetworkReply::NoError)
         {
             auto const jsonResponse = QJsonDocument::fromJson(qNetworkReply->readAll());
+            auto const taskSerialized = jsonResponse.object()["data"].toString();
+            emit tasksUpdateSucceeded(Task::deserialize(taskSerialized));
+        }
+        else
+        {
+            emit dataUpdateFailed();
+        }
+        manager.clearConnectionCache();
+    });
+}
+
+/// Searching a task
+/// \param title
+void HttpRequestHandler::tryTaskSearching(const QString &title)
+{
+    if(token.isEmpty())
+    {
+        emit dataRetrievingFailed();
+        return;
+    }
+    QNetworkRequest rq{QUrl(API_URL + "tasks/search/" + title)};
+    rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    auto const header = QString("Bearer %1").arg(token);
+    rq.setRawHeader(QByteArray("Authorization"), header.toUtf8());
+    auto const qNetworkReply = manager.get(rq);
+    connect(qNetworkReply,&QNetworkReply::finished,this,[=,this]{
+        if (qNetworkReply->error() == QNetworkReply::NoError)
+        {
+            auto const jsonResponse = QJsonDocument::fromJson(qNetworkReply->readAll());
             auto const tasksList = jsonResponse.object()["data"].toArray().toVariantList();
             QList<Task> tasks{};
             for (const auto &tempTaskSerialized : tasksList)
@@ -203,6 +247,39 @@ void HttpRequestHandler::tryTaskUpdate(const QString &slug, const Task &newValue
         else
         {
             emit dataRetrievingFailed();
+        }
+        manager.clearConnectionCache();
+    });
+}
+
+/// Set the finished status for a task
+/// \param slug
+/// \param status
+void HttpRequestHandler::tryMarkingAsFinished(const QString &slug,bool status)
+{
+    if(token.isEmpty())
+    {
+        emit dataUpdateFailed();
+        return;
+    }
+    QNetworkRequest rq{QUrl(API_URL + "tasks/" + slug + "/finish")};
+    rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    auto const header = QString("Bearer %1").arg(token);
+    rq.setRawHeader(QByteArray("Authorization"), header.toUtf8());
+    QJsonObject obj{};
+    obj["status"] = status;
+    const QJsonDocument doc{obj};
+    auto const qNetworkReply = manager.put(rq,doc.toJson());
+    connect(qNetworkReply,&QNetworkReply::finished,this,[=,this]{
+        if (qNetworkReply->error() == QNetworkReply::NoError)
+        {
+            auto const jsonResponse = QJsonDocument::fromJson(qNetworkReply->readAll());
+            auto const taskSerialized = jsonResponse.object()["data"].toString();
+            emit tasksUpdateSucceeded(Task::deserialize(taskSerialized));
+        }
+        else
+        {
+            emit dataUpdateFailed();
         }
         manager.clearConnectionCache();
     });
