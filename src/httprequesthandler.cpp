@@ -88,7 +88,7 @@ void HttpRequestHandler::tryLogout()
 
 /// Creates a new task
 /// \param taskToCreate
-void HttpRequestHandler::tryTaskCreation(const Task &taskToCreate)
+void HttpRequestHandler::tryTaskCreation(const QMap<QString,QVariant> &taskToCreateAsMap)
 {
     if(token.isEmpty())
     {
@@ -98,11 +98,11 @@ void HttpRequestHandler::tryTaskCreation(const Task &taskToCreate)
     QNetworkRequest rq{QUrl(API_URL + "tasks")};
     rq.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     QJsonObject obj{};
-    obj["title"] = taskToCreate.title;
-    obj["description"] = taskToCreate.description;
-    obj["date_limit"] = taskToCreate.date_limit;
-    obj["has_steps"] = taskToCreate.has_steps;
-    obj["priority"] = taskToCreate.priority;
+    obj["title"] = taskToCreateAsMap["title"].toString();
+    obj["description"] = taskToCreateAsMap["description"].toString();
+    obj["date_limit"] = taskToCreateAsMap["date_limit"].toString();
+    obj["has_steps"] = taskToCreateAsMap["has_steps"].toBool();
+    obj["priority"] = taskToCreateAsMap["priority"].toInt();
     const QJsonDocument doc{obj};
     auto const header = QString("Bearer %1").arg(token);
     rq.setRawHeader(QByteArray("Authorization"), header.toUtf8());

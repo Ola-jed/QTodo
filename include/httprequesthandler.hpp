@@ -26,7 +26,7 @@ public slots:
     void trySignup(const QMap<QString,QVariant> &data);
     void trySignin(const QMap<QString,QVariant> &data);
     void tryLogout();
-    void tryTaskCreation(const Task &taskToCreate);
+    void tryTaskCreation(const QMap<QString,QVariant> &taskToCreateAsMap);
     void tryTaskUpdate(const QString &slug,const Task &newValue);
     void tryMarkingAsFinished(const QString &slug,bool status);
     void tryTaskDeletion(const Task &taskToDelete);

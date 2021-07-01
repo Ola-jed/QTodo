@@ -6,6 +6,7 @@ AppWindow::AppWindow(QWidget *parent): QMainWindow(parent),taskList(new TaskList
     buildToolbar();
     buildLayout();
     makeConnections();
+    initStatusBar();
 }
 
 /// Build the app layout (center on screen) icon
@@ -15,6 +16,18 @@ void AppWindow::buildLayout()
     resize(600,450);
     setGeometry(QStyle::alignedRect(Qt::LeftToRight,Qt::AlignCenter,size(),QGuiApplication::primaryScreen()->availableGeometry()));
     setCentralWidget(new HomeWidget);
+    initStatusBar();
+}
+
+/// Init the status bar
+/// Display a message depending on the fact that user is authenticated or not
+void AppWindow::initStatusBar()
+{
+    auto stBar = statusBar();
+    stBar->showMessage(appUser.name.isEmpty()
+        ? "Not authenticated"
+        : "Authenticated as " + appUser.name
+    );
 }
 
 /// Build the window toolbar
@@ -96,6 +109,7 @@ void AppWindow::signupCompleted(const QString &data)
     appRequestsHandler.token = userJsonObject["token"].toString();
     appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
     QMessageBox::information(this,"Signup","Operation successful");
+    initStatusBar();
 }
 
 
@@ -117,6 +131,7 @@ void AppWindow::signinCompleted(const QString &data)
     appRequestsHandler.token = userJsonObject["token"].toString();
     appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
     QMessageBox::information(this,"Signin","Operation successful");
+    initStatusBar();
 }
 
 /// Try to logout the connected user
@@ -128,9 +143,13 @@ void AppWindow::onLogout()
 }
 
 /// Logout process completed successfully
+/// Make the user unusable
 void AppWindow::logoutCompleted()
 {
+    appUser.name.clear();
+    appUser.email.clear();
     QMessageBox::information(this,"Logout","Operation successful");
+    initStatusBar();
 }
 
 /// SHows a message box when something went wrong
@@ -183,5 +202,21 @@ void AppWindow::onTaskDelete(const Task &taskToDelete)
 /// Show the popup to create a new task
 void AppWindow::onTaskCreation()
 {
-    qDebug() << "Creates a task";
+    auto form = new TaskFormWidget(this);
+    connect(form,&TaskFormWidget::dataValidated,this,&AppWindow::makeTaskCreation);
+    form->setWindowFlags(Qt::Dialog);
+    form->show();
+}
+
+/// Creation of a new task
+/// \param data
+void AppWindow::makeTaskCreation(const QMap<QString, QVariant> &data)
+{
+    connect(&appRequestsHandler,&HttpRequestHandler::taskCreationSucceeded,[&]{
+        onTaskLoading();
+    });
+    connect(&appRequestsHandler,&HttpRequestHandler::dataCreationFailed,[&]{
+        qDebug() << "Task creation failed";
+    });
+    appRequestsHandler.tryTaskCreation(data);
 }

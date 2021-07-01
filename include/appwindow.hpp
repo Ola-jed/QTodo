@@ -13,6 +13,7 @@
 #include <QAction>
 #include <QStyle>
 #include <QScreen>
+#include <QStatusBar>
 
 class AppWindow: public QMainWindow
 {
@@ -32,6 +33,7 @@ private:
 
 private slots:
     void onQuit();
+    void initStatusBar();
     void onSignup();
     void makeSignup(const QMap<QString,QVariant> &data);
     void signupCompleted(const QString &data);
@@ -44,6 +46,7 @@ private slots:
     void operationFailed(const QString &data);
     void onTaskSearch(const QString &search);
     void onTaskCreation();
+    void makeTaskCreation(const QMap<QString,QVariant> &data);
     void onTaskDelete(const Task &taskToDelete);
 
 public:

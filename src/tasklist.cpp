@@ -44,7 +44,7 @@ void TaskList::clear()
 void TaskList::insertTask(const Task &taskToInsert)
 {
     auto taskWid = new TaskWidget(taskToInsert, this);
-    connect(taskWid,&TaskWidget::deleteRequested,[&,this]{
+    connect(taskWid,&TaskWidget::deleteRequested,[=,this]{
         emit taskDeleteRequested(taskToInsert);
         qDebug() << "Delete a task";
     });
