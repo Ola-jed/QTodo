@@ -229,5 +229,5 @@ void AppWindow::makeTaskCreation(const QMap<QString, QVariant> &data)
 /// \param taskToEdit
 void AppWindow::onTaskEdit(const Task &taskToEdit)
 {
-
+    auto editForm = new TaskFormWidget(this,taskToEdit);
 }

@@ -31,7 +31,6 @@ TaskList::~TaskList()
 /// Iterate and delete all layout items
 void TaskList::clear()
 {
-    QLayoutItem* child;
     while(!ui->scrollArea->widget()->layout()->isEmpty())
     {
         auto wid = ui->scrollArea->widget()->layout()->takeAt(0)->widget();
