@@ -21,6 +21,7 @@ Just import the project if you use an ide.
   - [x] Show the form with previous data
   - [ ] Handle update
 - [ ] Mark a task as finished or unfinished
+- [ ] Delete a task in the list
 - [ ] Export a(ll) task(s) to csv
 - [ ] Reset password
 
