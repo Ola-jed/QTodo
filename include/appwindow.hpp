@@ -42,6 +42,7 @@ private slots:
     void signinCompleted(const QString &data);
     void onLogout();
     void onTaskLoading();
+    void insertTasksInList(const QList<Task> &tasksList);
     void logoutCompleted();
     void operationFailed(const QString &data);
     void onTaskSearch(const QString &search);

@@ -63,7 +63,7 @@ void AppWindow::makeConnections()
     connect(logout,&QAction::triggered,this,&AppWindow::onLogout);
     connect(taskList,&TaskList::taskSearchRequested,this,&AppWindow::onTaskSearch);
     connect(taskList,&TaskList::taskCreationRequested,this,&AppWindow::onTaskCreation);
-    connect(taskList,&TaskList::taskEditRequested,this,&AppWindow::onTaskCreation);
+    connect(taskList,&TaskList::taskEditRequested,this,&AppWindow::onTaskEdit);
     connect(taskList,&TaskList::taskDeleteRequested,this,&AppWindow::onTaskDelete);
 }
 
@@ -164,11 +164,7 @@ void AppWindow::operationFailed(const QString &data)
 void AppWindow::onTaskLoading()
 {
     setCentralWidget(taskList);
-    taskList->clear();
-    connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[&](const QList<Task> &data){
-       taskList->insertTaskList(data);
-       qDebug() << "Loading tasks";
-    });
+    connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,this,&AppWindow::insertTasksInList);
     connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&](){
         qDebug() << "Error retrieving data";
     });
@@ -179,10 +175,7 @@ void AppWindow::onTaskLoading()
 /// \param search
 void AppWindow::onTaskSearch(const QString &search)
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[&](const QList<Task> &data){
-        taskList->clear();
-        taskList->insertTaskList(data);
-    });
+    connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,this,&AppWindow::insertTasksInList);
     connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&](){
         qDebug() << "Error retrieving data";
     });
@@ -193,8 +186,7 @@ void AppWindow::onTaskSearch(const QString &search)
 /// \param taskToDelete
 void AppWindow::onTaskDelete(const Task &taskToDelete)
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::taskDeletionSucceeded,[&]{
-        onTaskLoading();
+    connect(&appRequestsHandler,&HttpRequestHandler::taskDeletionSucceeded,this,[=]{
     });
     connect(&appRequestsHandler,&HttpRequestHandler::dataDeletionFailed,[&]{
         qDebug() << "Could not delete task";
@@ -206,18 +198,18 @@ void AppWindow::onTaskDelete(const Task &taskToDelete)
 void AppWindow::onTaskCreation()
 {
     auto form = new TaskFormWidget(this);
-    connect(form,&TaskFormWidget::dataValidated,form,&TaskFormWidget::close);
     connect(form,&TaskFormWidget::dataValidated,this,&AppWindow::makeTaskCreation);
     form->setWindowFlags(Qt::Dialog);
     form->show();
 }
 
 /// Creation of a new task
+/// Insert a new task widget in the task list
 /// \param data
 void AppWindow::makeTaskCreation(const QMap<QString, QVariant> &data)
 {
-    connect(&appRequestsHandler,&HttpRequestHandler::taskCreationSucceeded,[&]{
-        onTaskLoading();
+    connect(&appRequestsHandler,&HttpRequestHandler::taskCreationSucceeded,this,[=]{
+        taskList->insertTask(Task::fromMap(data));
     });
     connect(&appRequestsHandler,&HttpRequestHandler::dataCreationFailed,[&]{
         qDebug() << "Task creation failed";
@@ -226,8 +218,22 @@ void AppWindow::makeTaskCreation(const QMap<QString, QVariant> &data)
 }
 
 /// Show the form to edit a task
+/// TODO : finish implementation
 /// \param taskToEdit
 void AppWindow::onTaskEdit(const Task &taskToEdit)
 {
     auto editForm = new TaskFormWidget(this,taskToEdit);
+    connect(editForm,&TaskFormWidget::dataValidated,[]{
+       qDebug() << "TODO : update this task";
+    });
+    editForm->setWindowFlags(Qt::Dialog);
+    editForm->show();
+}
+
+/// Insert a list of tasks in the task widget
+/// \param taskList
+void AppWindow::insertTasksInList(const QList<Task> &tasksList)
+{
+    taskList->clear();
+    taskList->insertTaskList(tasksList);
 }

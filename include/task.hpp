@@ -1,6 +1,7 @@
 #ifndef QTODO_TASK_HPP
 #define QTODO_TASK_HPP
 
+#include "slugify.hpp"
 #include "serializable.hpp"
 
 struct Task: Serializable
@@ -42,7 +43,7 @@ struct Task: Serializable
     {
         return Task{
             map["title"].toString(),
-            map["slug"].toString(),
+            QString::fromStdString(slugify(map["title"].toString().toStdString())),
             map["description"].toString(),
             map["has_steps"].toBool(),
             map["priority"].toInt(),

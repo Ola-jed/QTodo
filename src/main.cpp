@@ -1,5 +1,6 @@
 #include "appwindow.hpp"
 #include "step.hpp"
+#include "slugify.hpp"
 #include <QFile>
 #include <QApplication>
 

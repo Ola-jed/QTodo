@@ -12,12 +12,10 @@ TaskList::TaskList(QWidget *parent) :
     connect(ui->searchBtn,&QPushButton::clicked,[this]{
         if(!ui->lineEdit->text().isEmpty())
         {
-            qDebug() << "Search";
             emit taskSearchRequested(ui->lineEdit->text());
         }
     });
     connect(ui->addBtn,&QPushButton::clicked,[this]{
-        qDebug() << "Add";
         emit taskCreationRequested();
     });
 }
@@ -28,14 +26,14 @@ TaskList::~TaskList()
 }
 
 /// Clear all the widgets
+/// FIXME : weird behaviour
 /// Iterate and delete all layout items
 void TaskList::clear()
 {
-    while(!ui->scrollArea->widget()->layout()->isEmpty())
-    {
-        auto wid = ui->scrollArea->widget()->layout()->takeAt(0)->widget();
-        delete wid;
-    }
+    auto wid = new QWidget(this);
+    auto lay = new QVBoxLayout(wid);
+    ui->scrollArea->setWidget(wid);
+    ui->scrollArea->setWidgetResizable(true);
 }
 
 /// Add a new task to the list
@@ -62,8 +60,17 @@ void TaskList::insertTask(const Task &taskToInsert)
 /// \param tasksToInsert
 void TaskList::insertTaskList(const QList<Task> &tasksToInsert)
 {
-    for(const auto & aTaskInList : tasksToInsert)
+    for(const auto &aTaskInList : tasksToInsert)
     {
         insertTask(aTaskInList);
     }
+}
+
+/// Delete a specific task widget in the list
+/// TODO : finish implementation
+/// \param taskToDelete
+void TaskList::deleteTask(const Task &taskToDelete)
+{
+
+//    ui->scrollArea->layout()->count();
 }

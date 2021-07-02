@@ -24,6 +24,7 @@ public:
 public slots:
     void clear();
     void insertTask(const Task &taskToInsert);
+    void deleteTask(const Task &taskToDelete);
     void insertTaskList(const QList<Task> &tasksToInsert);
 
 private:

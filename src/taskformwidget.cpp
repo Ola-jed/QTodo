@@ -14,7 +14,7 @@ TaskFormWidget::TaskFormWidget(QWidget *parent,const Task &initialTask) :
         ui->descriptionEdit->setPlainText(initialTask.description);
         ui->prioritySpinBox->setValue(initialTask.priority);
         ui->hasStepsCheckBox->setChecked(initialTask.has_steps);
-        ui->dateEdit->setDate(QDate::fromString(initialTask.date_limit,"dd/MM/yy"));
+        ui->dateEdit->setDate(QDate::fromString(initialTask.date_limit));
     }
 }
 
@@ -43,4 +43,5 @@ void TaskFormWidget::validateInputs()
         {"priority",ui->prioritySpinBox->value()},
         {"date_limit",ui->dateEdit->date().toString("dd/MM/yyyy")}
     });
+    close();
 }
