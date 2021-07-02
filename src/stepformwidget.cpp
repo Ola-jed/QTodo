@@ -5,19 +5,13 @@ StepFormWidget::StepFormWidget(QWidget *parent) :
     AbstractForm(parent), ui(new Ui::StepFormWidget)
 {
     ui->setupUi(this);
-    connect(ui->cancel,&QPushButton::clicked,this,&StepFormWidget::clearAll);
+    connect(ui->cancel,&QPushButton::clicked,this,&StepFormWidget::close);
     connect(ui->submit,&QPushButton::clicked,this,&StepFormWidget::validateInputs);
 }
 
 StepFormWidget::~StepFormWidget()
 {
     delete ui;
-}
-
-/// Clear all inputs
-void StepFormWidget::clearAll()
-{
-    ui->titleEdit->clear();
 }
 
 /// Validate fields

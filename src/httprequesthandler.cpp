@@ -114,7 +114,7 @@ void HttpRequestHandler::tryTaskCreation(const QMap<QString,QVariant> &taskToCre
         }
         else
         {
-            qDebug() << "Error : " << qNetworkReply->errorString();
+            qDebug() << "Error : " << qNetworkReply->readAll();
             emit dataCreationFailed();
         }
         manager.clearConnectionCache();

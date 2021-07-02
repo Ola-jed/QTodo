@@ -5,12 +5,14 @@
 
 struct Task: Serializable
 {
-    QString title;
-    QString slug;
-    QString description;
-    bool has_steps;
-    int priority;
-    QString date_limit;
+    QString title = "";
+    QString slug = "";
+    QString description = "";
+    bool has_steps = false;
+    int priority = 1;
+    QString date_limit = "";
+
+    Task() = default;
 
     Task(const QString &title,const QString &slug,const QString &description,bool has_steps,int priority,const QString &date_limit)
         :title(title),slug(slug),description(description),has_steps(has_steps),priority(priority),date_limit(date_limit)
@@ -30,6 +32,21 @@ struct Task: Serializable
             object["has_steps"].toBool(),
             object["priority"].toInt(),
             object["date_limit"].toString()
+        };
+    }
+
+    /// Build a task from a map
+    /// \param map
+    /// \return
+    static Task fromMap(const QMap<QString,QVariant> &map)
+    {
+        return Task{
+            map["title"].toString(),
+            map["slug"].toString(),
+            map["description"].toString(),
+            map["has_steps"].toBool(),
+            map["priority"].toInt(),
+            map["date_limit"].toString()
         };
     }
 

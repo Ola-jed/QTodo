@@ -1,12 +1,21 @@
 #include "taskformwidget.hpp"
 #include "../include/ui_TaskFormWidget.h"
 
-TaskFormWidget::TaskFormWidget(QWidget *parent) :
+TaskFormWidget::TaskFormWidget(QWidget *parent,const Task &initialTask) :
         AbstractForm(parent), ui(new Ui::TaskFormWidget)
 {
     ui->setupUi(this);
-    connect(ui->cancel,&QPushButton::clicked,this,&TaskFormWidget::clearAll);
+    connect(ui->cancel,&QPushButton::clicked,this,&TaskFormWidget::close);
     connect(ui->submit,&QPushButton::clicked,this,&TaskFormWidget::validateInputs);
+    // Set placeholders for task update
+    if(!initialTask.title.isEmpty())
+    {
+        ui->titleEdit->setText(initialTask.title);
+        ui->descriptionEdit->setPlainText(initialTask.description);
+        ui->prioritySpinBox->setValue(initialTask.priority);
+        ui->hasStepsCheckBox->setChecked(initialTask.has_steps);
+        ui->dateEdit->setDate(QDate::fromString(initialTask.date_limit,"dd/MM/yy"));
+    }
 }
 
 TaskFormWidget::~TaskFormWidget()
@@ -34,11 +43,4 @@ void TaskFormWidget::validateInputs()
         {"priority",ui->prioritySpinBox->value()},
         {"date_limit",ui->dateEdit->date().toString("dd/MM/yyyy")}
     });
-}
-
-/// Clear all inputs
-void TaskFormWidget::clearAll()
-{
-    ui->titleEdit->clear();
-    ui->descriptionEdit->clear();
 }

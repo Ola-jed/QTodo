@@ -2,6 +2,7 @@
 #define QTODO_TASKFORMWIDGET_HPP
 
 #include "abstractform.hpp"
+#include "task.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -15,11 +16,10 @@ class TaskFormWidget : public AbstractForm
 Q_OBJECT
 
 public:
-    explicit TaskFormWidget(QWidget *parent = nullptr);
+    explicit TaskFormWidget(QWidget *parent = nullptr,const Task &initialTask = Task{});
     ~TaskFormWidget() override;
 
 private slots:
-    void clearAll() override;
     void validateInputs() override;
 
 private:

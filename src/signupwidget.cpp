@@ -5,7 +5,12 @@ SignupWidget::SignupWidget(QWidget *parent) :
         AbstractForm(parent), ui(new Ui::SignupWidget)
 {
     ui->setupUi(this);
-    connect(ui->cancel,&QPushButton::clicked,this,&SignupWidget::clearAll);
+    connect(ui->cancel,&QPushButton::clicked,[&]{
+        ui->nameEdit->clear();
+        ui->emailEdit->clear();
+        ui->passwordEdit->clear();
+        ui->confirmPasswordEdit->clear();
+    });
     connect(ui->submit,&QPushButton::clicked,this,&SignupWidget::validateInputs);
 }
 
@@ -50,13 +55,4 @@ void SignupWidget::validateInputs()
         {"password1",ui->passwordEdit->text()},
         {"password2",ui->confirmPasswordEdit->text()},
     });
-}
-
-/// Clear all inputs to reset the form
-void SignupWidget::clearAll()
-{
-    ui->nameEdit->clear();
-    ui->emailEdit->clear();
-    ui->passwordEdit->clear();
-    ui->confirmPasswordEdit->clear();
 }

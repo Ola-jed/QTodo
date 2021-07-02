@@ -5,7 +5,10 @@ SigninWidget::SigninWidget(QWidget *parent) :
     AbstractForm(parent), ui(new Ui::SigninWidget)
 {
     ui->setupUi(this);
-    connect(ui->cancel,&QPushButton::clicked,this,&SigninWidget::clearAll);
+    connect(ui->cancel,&QPushButton::clicked,[&]{
+        ui->emailEdit->clear();
+        ui->passwordEdit->clear();
+    });
     connect(ui->submit,&QPushButton::clicked,this,&SigninWidget::validateInputs);
 }
 
@@ -38,11 +41,4 @@ void SigninWidget::validateInputs()
         {"email",ui->emailEdit->text()},
         {"password",ui->passwordEdit->text()}
     });
-}
-
-/// Clear all inputs of the form
-void SigninWidget::clearAll()
-{
-    ui->emailEdit->clear();
-    ui->passwordEdit->clear();
 }

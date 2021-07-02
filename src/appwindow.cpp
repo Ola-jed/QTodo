@@ -153,7 +153,7 @@ void AppWindow::logoutCompleted()
     initStatusBar();
 }
 
-/// SHows a message box when something went wrong
+/// Shows a message box when something went wrong
 /// \param data
 void AppWindow::operationFailed(const QString &data)
 {
@@ -167,6 +167,7 @@ void AppWindow::onTaskLoading()
     taskList->clear();
     connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[&](const QList<Task> &data){
        taskList->insertTaskList(data);
+       qDebug() << "Loading tasks";
     });
     connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&](){
         qDebug() << "Error retrieving data";
@@ -192,19 +193,20 @@ void AppWindow::onTaskSearch(const QString &search)
 /// \param taskToDelete
 void AppWindow::onTaskDelete(const Task &taskToDelete)
 {
-    appRequestsHandler.tryTaskDeletion(taskToDelete);
     connect(&appRequestsHandler,&HttpRequestHandler::taskDeletionSucceeded,[&]{
-       onTaskLoading();
+        onTaskLoading();
     });
     connect(&appRequestsHandler,&HttpRequestHandler::dataDeletionFailed,[&]{
         qDebug() << "Could not delete task";
     });
+    appRequestsHandler.tryTaskDeletion(taskToDelete);
 }
 
 /// Show the popup to create a new task
 void AppWindow::onTaskCreation()
 {
     auto form = new TaskFormWidget(this);
+    connect(form,&TaskFormWidget::dataValidated,form,&TaskFormWidget::close);
     connect(form,&TaskFormWidget::dataValidated,this,&AppWindow::makeTaskCreation);
     form->setWindowFlags(Qt::Dialog);
     form->show();

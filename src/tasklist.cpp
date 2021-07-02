@@ -32,10 +32,10 @@ TaskList::~TaskList()
 void TaskList::clear()
 {
     QLayoutItem* child;
-    while ((child = ui->scrollArea->widget()->layout()->takeAt(0)) != nullptr)
+    while(!ui->scrollArea->widget()->layout()->isEmpty())
     {
-        delete child->widget();
-        delete child;
+        auto wid = ui->scrollArea->widget()->layout()->takeAt(0)->widget();
+        delete wid;
     }
 }
 

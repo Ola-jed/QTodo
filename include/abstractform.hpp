@@ -14,7 +14,6 @@ public:
         : QWidget(parent){}
 private slots:
     virtual void validateInputs() = 0;
-    virtual void clearAll() = 0;
 };
 
 

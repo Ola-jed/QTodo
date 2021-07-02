@@ -19,7 +19,6 @@ public:
     ~StepFormWidget() override;
 
 private slots:
-    void clearAll() override;
     void validateInputs() override;
 
 private:

@@ -20,7 +20,6 @@ public:
 
 private slots:
     void validateInputs() override;
-    void clearAll() override;
 
 private:
     Ui::SigninWidget *ui;
