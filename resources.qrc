@@ -11,5 +11,6 @@
         <file>assets/delete.png</file>
         <file>assets/add.png</file>
         <file>assets/search.png</file>
+        <file>assets/save.png</file>
     </qresource>
 </RCC>

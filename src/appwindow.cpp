@@ -38,6 +38,7 @@ void AppWindow::buildToolbar()
     toolbar->addAction(signIn);
     toolbar->addSeparator();
     toolbar->addAction(tasks);
+    toolbar->addAction(saveAll);
     toolbar->addSeparator();
     toolbar->addAction(logout);
     toolbar->addAction(exit);
@@ -49,6 +50,7 @@ void AppWindow::buildActions()
     signUp = new QAction(QIcon(":assets/signup.png"),"Sign up",this);
     signIn = new QAction(QIcon(":assets/signin.png"),"Sign in",this);
     tasks = new QAction(QIcon(":assets/task.png"),"Tasks",this);
+    saveAll = new QAction(QIcon(":assets/save.png"),"Save to csv",this);
     logout = new QAction(QIcon(":assets/logout.png"),"Logout",this);
     exit = new QAction(QIcon(":assets/exit.png"),"Exit",this);
 }
@@ -60,6 +62,7 @@ void AppWindow::makeConnections()
     connect(signUp,&QAction::triggered,this,&AppWindow::onSignup);
     connect(signIn,&QAction::triggered,this,&AppWindow::onSignin);
     connect(tasks,&QAction::triggered,this,&AppWindow::onTaskLoading);
+    connect(saveAll,&QAction::triggered,this,&AppWindow::onTasksSave);
     connect(logout,&QAction::triggered,this,&AppWindow::onLogout);
     connect(taskList,&TaskList::taskSearchRequested,this,&AppWindow::onTaskSearch);
     connect(taskList,&TaskList::taskCreationRequested,this,&AppWindow::onTaskCreation);
@@ -257,4 +260,26 @@ void AppWindow::onTaskMarkingAsFinished(const QString &slug, bool status)
         qDebug() << "Task marking as finished failed";
     });
     appRequestsHandler.tryTaskMarkingAsFinished(slug,status);
+}
+
+/// Save all the tasks in a file
+void AppWindow::onTasksSave()
+{
+    const auto filename = QFileDialog::getSaveFileName(this,"Save to csv");
+    if(filename.trimmed().isEmpty())
+    {
+        QMessageBox::warning(this,"Save to csv","Provide a correct file name");
+        return;
+    }
+    connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,[=,this](const QList<Task> &tasksList){
+        if(CsvLoader::saveTaskListToCsv(tasksList,filename))
+        {
+            QMessageBox::information(this,"Save to csv","Saved successfully");
+        }
+        else
+        {
+            QMessageBox::information(this,"Save to csv","Could not save tasks");
+        }
+    });
+    appRequestsHandler.tryTasksRetrieving();
 }

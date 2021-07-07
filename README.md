@@ -15,14 +15,15 @@ make
 
 Just import the project if you use an ide.
 
-## TODO
+## Features
 
-- [ ] Edit a task
+- [x] Create a task
+- [x] Edit a task
   - [x] Show the form with previous data
-  - [ ] Handle update
-- [ ] Mark a task as finished or unfinished
-- [ ] Delete a task in the list
-- [ ] Export a(ll) task(s) to csv
+  - [x] Handle update
+- [x] Mark a task as finished or unfinished
+- [x] Delete a task in the list
+- [x] Export all tasks to csv
 - [ ] Reset password
 
 ## Credits

@@ -2,6 +2,7 @@
 #define QTODO_APPWINDOW_HPP
 
 #include "tasklist.hpp"
+#include "csvloader.hpp"
 #include "homewidget.hpp"
 #include "signinwidget.hpp"
 #include "signupwidget.hpp"
@@ -10,6 +11,7 @@
 #include <QGuiApplication>
 #include <QMainWindow>
 #include <QToolBar>
+#include <QFileDialog>
 #include <QAction>
 #include <QStyle>
 #include <QScreen>
@@ -22,6 +24,7 @@ private:
     QAction *signUp;
     QAction *signIn;
     QAction *tasks;
+    QAction *saveAll;
     QAction *logout;
     QAction *exit;
     TaskList *taskList;
@@ -52,6 +55,7 @@ private slots:
     void makeTaskCreation(const QMap<QString,QVariant> &data);
     void makeTaskEdit(const QString &slug,const QMap<QString,QVariant> &data);
     void onTaskDelete(const Task &taskToDelete);
+    void onTasksSave();
 
 public:
     explicit AppWindow(QWidget* parent = nullptr);
