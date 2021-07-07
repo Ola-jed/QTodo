@@ -41,12 +41,15 @@ void TaskList::clear()
 void TaskList::insertTask(const Task &taskToInsert)
 {
     auto taskWid = new TaskWidget(taskToInsert, this);
-    connect(taskWid,&TaskWidget::deleteRequested,[=,this]{
-        emit taskDeleteRequested(taskToInsert);
+    connect(taskWid,&TaskWidget::markingAsFinishedRequested,[=,this](bool status){
+        emit taskMarkingAsFinishedRequested(taskToInsert.slug,status);
+        qDebug() << status;
     });
     connect(taskWid,&TaskWidget::editRequested,[=,this]{
         emit taskEditRequested(taskToInsert);
-        qDebug() << "Edit a task";
+    });
+    connect(taskWid,&TaskWidget::deleteRequested,[=,this]{
+        emit taskDeleteRequested(taskToInsert);
     });
     ui->scrollArea->widget()->layout()->addWidget(taskWid);
     auto lineB = new QWidget;
@@ -64,13 +67,4 @@ void TaskList::insertTaskList(const QList<Task> &tasksToInsert)
     {
         insertTask(aTaskInList);
     }
-}
-
-/// Delete a specific task widget in the list
-/// TODO : finish implementation
-/// \param taskToDelete
-void TaskList::deleteTask(const Task &taskToDelete)
-{
-
-//    ui->scrollArea->layout()->count();
 }

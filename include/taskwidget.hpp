@@ -26,6 +26,7 @@ private:
 signals:
     void editRequested(const Task &taskToEdit);
     void deleteRequested(const Task &taskToDelete);
+    void markingAsFinishedRequested(bool status);
 };
 
 #endif //QTODO_TASKWIDGET_HPP

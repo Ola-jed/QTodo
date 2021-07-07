@@ -48,7 +48,9 @@ private slots:
     void onTaskSearch(const QString &search);
     void onTaskCreation();
     void onTaskEdit(const Task &taskToEdit);
+    void onTaskMarkingAsFinished(const QString &slug,bool status);
     void makeTaskCreation(const QMap<QString,QVariant> &data);
+    void makeTaskEdit(const QString &slug,const QMap<QString,QVariant> &data);
     void onTaskDelete(const Task &taskToDelete);
 
 public:

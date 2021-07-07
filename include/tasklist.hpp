@@ -24,7 +24,6 @@ public:
 public slots:
     void clear();
     void insertTask(const Task &taskToInsert);
-    void deleteTask(const Task &taskToDelete);
     void insertTaskList(const QList<Task> &tasksToInsert);
 
 private:
@@ -34,6 +33,7 @@ signals:
     void taskCreationRequested();
     void taskSearchRequested(const QString &search);
     void taskEditRequested(const Task &taskToDelete);
+    void taskMarkingAsFinishedRequested(const QString &slug,bool status);
     void taskDeleteRequested(const Task &taskToDelete);
 };
 

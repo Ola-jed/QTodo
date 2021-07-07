@@ -26,7 +26,6 @@ void HttpRequestHandler::trySignin(const QMap<QString, QVariant> &data)
         {
             emit authFailed(qNetworkReply->errorString());
         }
-        manager.clearConnectionCache();
     });
 }
 
@@ -54,7 +53,6 @@ void HttpRequestHandler::trySignup(const QMap<QString, QVariant> &data)
         {
             emit authFailed(qNetworkReply->errorString());
         }
-        manager.clearConnectionCache();
     });
 }
 
@@ -82,7 +80,6 @@ void HttpRequestHandler::tryLogout()
         {
             emit authFailed(qNetworkReply->errorString());
         }
-        manager.clearConnectionCache();
     });
 }
 
@@ -117,7 +114,6 @@ void HttpRequestHandler::tryTaskCreation(const QMap<QString,QVariant> &taskToCre
             qDebug() << "Error : " << qNetworkReply->readAll();
             emit dataCreationFailed();
         }
-        manager.clearConnectionCache();
     });
 }
 
@@ -151,7 +147,6 @@ void HttpRequestHandler::tryTasksRetrieving()
         {
             emit dataRetrievingFailed();
         }
-        manager.clearConnectionCache();
     });
 }
 
@@ -178,7 +173,6 @@ void HttpRequestHandler::tryTaskDeletion(const Task &taskToDelete)
         {
             emit dataDeletionFailed();
         }
-        manager.clearConnectionCache();
     });
 }
 
@@ -209,13 +203,12 @@ void HttpRequestHandler::tryTaskUpdate(const QString &slug, const Task &newValue
         {
             auto const jsonResponse = QJsonDocument::fromJson(qNetworkReply->readAll());
             auto const taskSerialized = jsonResponse.object()["data"].toString();
-            emit tasksUpdateSucceeded(Task::deserialize(taskSerialized));
+            emit taskUpdateSucceeded(Task::deserialize(taskSerialized));
         }
         else
         {
             emit dataUpdateFailed();
         }
-        manager.clearConnectionCache();
     });
 }
 
@@ -249,14 +242,13 @@ void HttpRequestHandler::tryTaskSearching(const QString &title)
         {
             emit dataRetrievingFailed();
         }
-        manager.clearConnectionCache();
     });
 }
 
 /// Set the finished status for a task
 /// \param slug
 /// \param status
-void HttpRequestHandler::tryMarkingAsFinished(const QString &slug,bool status)
+void HttpRequestHandler::tryTaskMarkingAsFinished(const QString &slug, bool status)
 {
     if(token.isEmpty())
     {
@@ -276,12 +268,11 @@ void HttpRequestHandler::tryMarkingAsFinished(const QString &slug,bool status)
         {
             auto const jsonResponse = QJsonDocument::fromJson(qNetworkReply->readAll());
             auto const taskSerialized = jsonResponse.object()["data"].toString();
-            emit tasksUpdateSucceeded(Task::deserialize(taskSerialized));
+            emit taskUpdateSucceeded(Task::deserialize(taskSerialized));
         }
         else
         {
             emit dataUpdateFailed();
         }
-        manager.clearConnectionCache();
     });
 }
