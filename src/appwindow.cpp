@@ -250,7 +250,7 @@ void AppWindow::makeTaskEdit(const QString &slug, const QMap<QString,QVariant> &
     appRequestsHandler.tryTaskUpdate(slug,Task::fromMap(data));
 }
 
-///
+/// Mark as finished a task
 /// \param slug
 /// \param status
 void AppWindow::onTaskMarkingAsFinished(const QString &slug, bool status)
