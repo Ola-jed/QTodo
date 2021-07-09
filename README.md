@@ -3,6 +3,8 @@
 Lightweight todo list app made with Qt 5
 Calls a rest api for authentication and data storage
 
+[Here the rest api used](https://github.com/Ola-jed/todo-api)
+
 ## How to build ?
 
 ```bash
