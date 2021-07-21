@@ -169,7 +169,7 @@ void AppWindow::onTaskLoading()
 {
     setCentralWidget(taskList);
     connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,this,&AppWindow::insertTasksInList);
-    connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&](){
+    connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&]{
         qDebug() << "Error retrieving data";
     });
     appRequestsHandler.tryTasksRetrieving();
@@ -180,7 +180,7 @@ void AppWindow::onTaskLoading()
 void AppWindow::onTaskSearch(const QString &search)
 {
     connect(&appRequestsHandler,&HttpRequestHandler::tasksRetrievingSucceeded,this,&AppWindow::insertTasksInList);
-    connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&](){
+    connect(&appRequestsHandler,&HttpRequestHandler::dataRetrievingFailed,[&]{
         qDebug() << "Error retrieving data";
     });
     appRequestsHandler.tryTaskSearching(search);
