@@ -23,6 +23,7 @@ private:
     HttpRequestHandler appRequestsHandler{};
     QAction *signUp;
     QAction *signIn;
+    QAction *account;
     QAction *tasks;
     QAction *saveAll;
     QAction *logout;
