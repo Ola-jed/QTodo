@@ -7,6 +7,7 @@ AppWindow::AppWindow(QWidget *parent) : QMainWindow(parent), taskList(new TaskLi
     buildLayout();
     makeConnections();
     initStatusBar();
+    hideActions();
 }
 
 /// Build the app layout (center on screen) icon
@@ -64,6 +65,7 @@ void AppWindow::makeConnections()
     connect(exit, &QAction::triggered, this, &AppWindow::onQuit);
     connect(signUp, &QAction::triggered, this, &AppWindow::onSignup);
     connect(signIn, &QAction::triggered, this, &AppWindow::onSignin);
+    connect(account, &QAction::triggered, this, &AppWindow::onAccountShow);
     connect(tasks, &QAction::triggered, this, &AppWindow::onTaskLoading);
     connect(saveAll, &QAction::triggered, this, &AppWindow::onTasksSave);
     connect(logout, &QAction::triggered, this, &AppWindow::onLogout);
@@ -72,6 +74,24 @@ void AppWindow::makeConnections()
     connect(taskList, &TaskList::taskEditRequested, this, &AppWindow::onTaskEdit);
     connect(taskList, &TaskList::taskDeleteRequested, this, &AppWindow::onTaskDelete);
     connect(taskList, &TaskList::taskMarkingAsFinishedRequested, this, &AppWindow::onTaskMarkingAsFinished);
+}
+
+/// Show actions in the toolbar
+void AppWindow::showActions()
+{
+    tasks->setVisible(true);
+    saveAll->setVisible(true);
+    account->setVisible(true);
+    logout->setVisible(true);
+}
+
+/// Hide actions in the toolbar
+void AppWindow::hideActions()
+{
+    tasks->setVisible(false);
+    saveAll->setVisible(false);
+    account->setVisible(false);
+    logout->setVisible(false);
 }
 
 /// Prompt to ask the user a confirmation to quit
@@ -114,9 +134,10 @@ void AppWindow::signupCompleted(const QString &data)
 {
     auto const userData       = QJsonDocument::fromJson(data.toUtf8());
     auto const userJsonObject = userData.object();
-    appRequestsHandler.token = userJsonObject["token"].toString();
+    appRequestsHandler.token  = userJsonObject["token"].toString();
     appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
     QMessageBox::information(this, "Signup", "Operation successful");
+    showActions();
     initStatusBar();
 }
 
@@ -139,6 +160,7 @@ void AppWindow::signinCompleted(const QString &data)
     appRequestsHandler.token = userJsonObject["token"].toString();
     appUser = User::deserialize(QJsonDocument{userJsonObject["user"].toObject()}.toJson());
     QMessageBox::information(this, "Signin", "Operation successful");
+    showActions();
     initStatusBar();
 }
 
@@ -157,6 +179,7 @@ void AppWindow::logoutCompleted()
     appUser.name.clear();
     appUser.email.clear();
     QMessageBox::information(this, "Logout", "Operation successful");
+    hideActions();
     initStatusBar();
 }
 
@@ -293,4 +316,11 @@ void AppWindow::onTasksSave()
                 }
             });
     appRequestsHandler.tryTasksRetrieving();
+}
+
+/// Show the account form
+void AppWindow::onAccountShow()
+{
+    auto accountForm = new AccountFormWidget(this);
+    setCentralWidget(accountForm);
 }

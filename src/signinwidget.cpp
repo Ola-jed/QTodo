@@ -20,7 +20,7 @@ SigninWidget::~SigninWidget()
 /// Validation of inputs
 void SigninWidget::validateInputs()
 {
-    if(ui->emailEdit->text().isEmpty())
+    if(ui->emailEdit->text().trimmed().isEmpty())
     {
         QMessageBox::warning(this,"Email","The email field is required");
         return;
@@ -32,7 +32,7 @@ void SigninWidget::validateInputs()
         QMessageBox::warning(this,"Email","Invalid email");
         return;
     }
-    if(ui->passwordEdit->text().isEmpty())
+    if(ui->passwordEdit->text().trimmed().isEmpty())
     {
         QMessageBox::warning(this,"Password","The password field is required");
         return;

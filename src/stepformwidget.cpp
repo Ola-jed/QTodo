@@ -17,7 +17,7 @@ StepFormWidget::~StepFormWidget()
 /// Validate fields
 void StepFormWidget::validateInputs()
 {
-    if(ui->titleEdit->text().isEmpty())
+    if(ui->titleEdit->text().trimmed().isEmpty())
     {
         QMessageBox::warning(this,"Title","The title field is required");
         return;

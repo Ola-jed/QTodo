@@ -7,6 +7,7 @@
 #include "signinwidget.hpp"
 #include "signupwidget.hpp"
 #include "taskformwidget.hpp"
+#include "accountformwidget.hpp"
 #include "httprequesthandler.hpp"
 #include <QGuiApplication>
 #include <QMainWindow>
@@ -33,6 +34,8 @@ private:
     void buildToolbar();
     void buildActions();
     void makeConnections();
+    void showActions();
+    void hideActions();
     User appUser;
 
 private slots:
@@ -57,6 +60,7 @@ private slots:
     void makeTaskEdit(const QString &slug,const QMap<QString,QVariant> &data);
     void onTaskDelete(const Task &taskToDelete);
     void onTasksSave();
+    void onAccountShow();
 
 public:
     explicit AppWindow(QWidget* parent = nullptr);

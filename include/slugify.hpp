@@ -8,7 +8,7 @@
 
 inline std::string slugify(std::string input)
 {
-    std::unordered_map<std::string, std::string> charMap {
+    const std::unordered_map<std::string, std::string> charMap {
             // latin
             {"À", "A"}, {"Á", "A"}, {"Â", "A"}, {"Ã", "A"}, {"Ä", "A"}, {"Å", "A"}, {"Æ", "AE"}, {
              "Ç", "C"}, {"È", "E"}, {"É", "E"}, {"Ê", "E"}, {"Ë", "E"}, {"Ì", "I"}, {"Í", "I"}, {

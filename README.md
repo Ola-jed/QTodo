@@ -26,6 +26,7 @@ Just import the project if you use an ide.
 - [x] Mark a task as finished or unfinished
 - [x] Delete a task in the list
 - [x] Export all tasks to csv
+- [ ] Account management
 - [ ] Reset password
 
 ## Credits

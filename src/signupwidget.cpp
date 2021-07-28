@@ -22,12 +22,12 @@ SignupWidget::~SignupWidget()
 /// Function to validate the form
 void SignupWidget::validateInputs()
 {
-    if(ui->nameEdit->text().isEmpty())
+    if(ui->nameEdit->text().trimmed().isEmpty())
     {
         QMessageBox::warning(this,"Name","The name field is required");
         return;
     }
-    if(ui->emailEdit->text().isEmpty())
+    if(ui->emailEdit->text().trimmed().isEmpty())
     {
         QMessageBox::warning(this,"Email","The email field is required");
         return;
@@ -39,7 +39,7 @@ void SignupWidget::validateInputs()
         QMessageBox::warning(this,"Email","Invalid email");
         return;
     }
-    if(ui->passwordEdit->text().isEmpty())
+    if(ui->passwordEdit->text().trimmed().isEmpty())
     {
         QMessageBox::warning(this,"Password","The password field is required");
         return;

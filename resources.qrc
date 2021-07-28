@@ -13,5 +13,6 @@
         <file>assets/search.png</file>
         <file>assets/save.png</file>
         <file>assets/account.png</file>
+        <file>assets/delete.png</file>
     </qresource>
 </RCC>
