@@ -1,10 +1,13 @@
 #include "accountformwidget.hpp"
 #include "../include/ui_AccountFormWidget.h"
 
-AccountFormWidget::AccountFormWidget(QWidget *parent) :
+AccountFormWidget::AccountFormWidget(const QMap<QString,QVariant> &userData,QWidget *parent) :
         AbstractForm(parent), ui(new Ui::AccountFormWidget)
 {
     ui->setupUi(this);
+    const auto data = userData["data"].toMap();
+    ui->nameEdit->setText(data["name"].toString());
+    ui->emailEdit->setText(data["email"].toString());
     connect(ui->updateButton, &QPushButton::clicked, this, &AccountFormWidget::validateInputs);
     connect(ui->deleteButton, &QPushButton::clicked, this, &AccountFormWidget::checkInputForDeletion);
 }
@@ -55,5 +58,5 @@ void AccountFormWidget::checkInputForDeletion()
         QMessageBox::warning(this, "Password", "The password field is required");
         return;
     }
-    emit deletionRequested();
+    emit deletionRequested(ui->passwordEdit->text());
 }

@@ -65,7 +65,7 @@ void AppWindow::makeConnections()
     connect(exit, &QAction::triggered, this, &AppWindow::onQuit);
     connect(signUp, &QAction::triggered, this, &AppWindow::onSignup);
     connect(signIn, &QAction::triggered, this, &AppWindow::onSignin);
-    connect(account, &QAction::triggered, this, &AppWindow::onAccountShow);
+    connect(account, &QAction::triggered, this, &AppWindow::buildAccountScreen);
     connect(tasks, &QAction::triggered, this, &AppWindow::onTaskLoading);
     connect(saveAll, &QAction::triggered, this, &AppWindow::onTasksSave);
     connect(logout, &QAction::triggered, this, &AppWindow::onLogout);
@@ -318,9 +318,30 @@ void AppWindow::onTasksSave()
     appRequestsHandler.tryTasksRetrieving();
 }
 
-/// Show the account form
-void AppWindow::onAccountShow()
+/// Build the account screen (forms) with the user data
+/// TODO : Handle account deletion
+void AppWindow::buildAccountScreen()
 {
-    auto accountForm = new AccountFormWidget(this);
-    setCentralWidget(accountForm);
+    connect(&appRequestsHandler, &HttpRequestHandler::accountDataRetrievingSucceeded, [=,this] (const QMap<QString,QVariant> &userData) {
+        auto accountForm = new AccountFormWidget(userData,this);
+        connect(accountForm,&AccountFormWidget::dataValidated,this,&AppWindow::makeAccountUpdate);
+        setCentralWidget(accountForm);
+    });
+    connect(&appRequestsHandler, &HttpRequestHandler::dataRetrievingFailed,[] {
+       qDebug() << "Could not retrieve account information";
+    });
+    appRequestsHandler.tryAccountInformationRetrieving();
+}
+
+/// Make the account update and handle api result
+/// \param data
+void AppWindow::makeAccountUpdate(const QMap<QString,QVariant> &data)
+{
+    connect(&appRequestsHandler,&HttpRequestHandler::accountUpdateSuceeded,[this] {
+       QMessageBox::information(this,"Account","Account update succeeded");
+    });
+    connect(&appRequestsHandler,&HttpRequestHandler::dataUpdateFailed,[] {
+        qDebug() << "Account update failed";
+    });
+    appRequestsHandler.tryAccountUpdate(data);
 }

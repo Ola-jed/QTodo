@@ -15,7 +15,7 @@ class AccountFormWidget : public AbstractForm
 Q_OBJECT
 
 public:
-    explicit AccountFormWidget(QWidget *parent = nullptr);
+    explicit AccountFormWidget(const QMap<QString,QVariant> &userData,QWidget *parent = nullptr);
     ~AccountFormWidget() override;
 
 private slots:
@@ -26,8 +26,8 @@ private:
     Ui::AccountFormWidget *ui;
 
 signals:
-    void dataValidated(QMap<QString, QVariant> map);
-    void deletionRequested();
+    void dataValidated(const QMap<QString, QVariant> &map);
+    void deletionRequested(const QString &password);
 };
 
 #endif //QTODO_ACCOUNTFORMWIDGET_HPP

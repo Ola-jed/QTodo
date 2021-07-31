@@ -32,6 +32,9 @@ public slots:
     void tryTaskDeletion(const Task &taskToDelete);
     void tryTaskSearching(const QString &title);
     void tryTasksRetrieving();
+    void tryAccountInformationRetrieving();
+    void tryAccountUpdate(const QMap<QString,QVariant> &newAccountData);
+    void tryAccountDeletion(const QString &password);
 
 signals:
     void signupSucceeded(const QString &result);
@@ -42,6 +45,9 @@ signals:
     void taskDeletionSucceeded();
     void tasksRetrievingSucceeded(const QList<Task> &tasks);
     void taskUpdateSucceeded(const Task &task);
+    void accountDataRetrievingSucceeded(const QMap<QString,QVariant> &accountData);
+    void accountUpdateSuceeded();
+    void accountDeleteSuceeded();
     void dataCreationFailed();
     void dataRetrievingFailed();
     void dataUpdateFailed();

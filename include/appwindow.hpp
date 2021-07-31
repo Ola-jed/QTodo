@@ -60,7 +60,8 @@ private slots:
     void makeTaskEdit(const QString &slug,const QMap<QString,QVariant> &data);
     void onTaskDelete(const Task &taskToDelete);
     void onTasksSave();
-    void onAccountShow();
+    void buildAccountScreen();
+    void makeAccountUpdate(const QMap<QString,QVariant> &data);
 
 public:
     explicit AppWindow(QWidget* parent = nullptr);
