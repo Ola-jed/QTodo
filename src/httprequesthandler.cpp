@@ -325,13 +325,14 @@ void HttpRequestHandler::tryAccountUpdate(const QMap<QString,QVariant> &newAccou
     connect(qNetworkReply, &QNetworkReply::finished, this, [=, this] {
         if (qNetworkReply->error() == QNetworkReply::NoError)
         {
-            auto const jsonResponse   = QJsonDocument::fromJson(qNetworkReply->readAll());
-            qDebug() << jsonResponse;
+            auto const jsonResponse = QJsonDocument::fromJson(qNetworkReply->readAll());
+            if(jsonResponse.object()["message"] == "Account updated")
+            {
+                emit accountUpdateSuceeded();
+                return;
+            }
         }
-        else
-        {
-            emit dataUpdateFailed();
-        }
+        emit dataUpdateFailed();
     });
 }
 
