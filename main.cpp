@@ -1,7 +1,7 @@
 #include "appwindow.hpp"
 #include "step.hpp"
-#include "slugify.hpp"
 #include <QFile>
+#include <QSplashScreen>
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -11,6 +11,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("QTodo");
     QCoreApplication::setOrganizationName("QTodo");
     QCoreApplication::setApplicationVersion("1.0");
+    QPixmap pixmap(":assets/icon.png");
+    QSplashScreen splash(pixmap);
+    splash.show();
+    QApplication::processEvents();
     QFile f{":dark/style.qss"};
     if (!f.exists())
     {
@@ -24,5 +28,6 @@ int main(int argc, char *argv[])
     }
     AppWindow e{};
     e.show();
+    splash.finish(&e);
     return QApplication::exec();
 }

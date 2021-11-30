@@ -1,9 +1,9 @@
 #include "httprequesthandler.hpp"
 
-// REMOTE API LINK :
+// REMOTE API LINK : https://todolist-rest-api.herokuapp.com/api/
 // LOCAL API LINK : http://localhost:8000/api/
 
-const QString HttpRequestHandler::API_URL = "http://localhost:8000/api/";
+const QString HttpRequestHandler::API_URL = "https://todolist-rest-api.herokuapp.com/api/";
 
 /// Make the signin
 /// \param data
